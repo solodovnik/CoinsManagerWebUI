@@ -39,8 +39,8 @@ namespace CoinsManagerWebUI
 
             //services.AddHttpClient<ICoinCatalogService, CoinCatalogService>(c =>
             //    c.BaseAddress = new Uri("http://localhost:5001"));
-            services.AddHttpClient<ICoinCatalogService, CoinCatalogService>("CoinsManager", c =>
-                c.BaseAddress = new Uri("http://localhost:5000"));
+            services.AddHttpClient<ICoinCatalogService, CoinCatalogService>(c =>
+                c.BaseAddress = new Uri("https://localhost:5010"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

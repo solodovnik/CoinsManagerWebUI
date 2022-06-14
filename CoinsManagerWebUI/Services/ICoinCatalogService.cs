@@ -1,7 +1,5 @@
 ﻿using CoinsManagerWebUI.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CoinsManagerWebUI.Services
@@ -9,5 +7,8 @@ namespace CoinsManagerWebUI.Services
     public interface ICoinCatalogService
     {
         Task<IEnumerable<Coin>> GetCoinsByPeriod(int periodId);
+        Task<IEnumerable<Continent>> GetAllContinents();
+        Task<IEnumerable<Country>> GetCountriesByContinentId(int continentId);
+        Task<IEnumerable<Period>> GetPeriodsByCountryId(int countryId);
     }
 }

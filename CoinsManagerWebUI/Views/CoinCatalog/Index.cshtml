@@ -1,26 +1,130 @@
-﻿@*@model CoinsManagerWebUI.Models.View.CoinListModel*@
+﻿@model CoinsManagerWebUI.Models.View.CoinListModel
+@{
+    /**/
 
-hello
-@*<div class="row">
-        @if (Model.Coins.Count() == 0)
-        {
-            <text>No events were found.</text>
-        }
-        else
-        {
-            <table class="table">
-                <thead>
-                    <tr class="columnHeader">
-                        <th></th>
-                        <th>DATE</th>
-                        <th>NAME</th>
-                        <th>ARTIST</th>
-                        <th>PRICE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @Html.DisplayFor(m => m.Coins)
-                </tbody>
-            </table>
-        }
-    </div>*@
+    ViewBag.Title = "Collection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div style="width: 100%; display: table;">
+    <div style="display: table-row">
+        <div style="display: table-cell; vertical-align: top; text-align: left; padding-right: 20px">
+            @using (Html.BeginForm("Index", "CoinCatalog", FormMethod.Post))
+            {
+                <br />
+                //                @Html.DropDownListFor(m => m.SelectedContinent, Model.Continents, "Select continent", new { onchange = "document.forms[0].submit();", @class = "form-control" })
+                @Html.DropDownList("continent", ViewData["Continent"] as SelectList, "Select continent", new { onchange = "document.forms[0].submit();", @class = "form-control" })
+                <br />
+                <div style="display: table-row">
+                    <div style="display: table-cell; width: 300px; padding-right: 20px;">
+                        @*@Html.DropDownListFor(m => m.SelectedCountry, Model.Countries, "Select country", new { onchange = "document.forms[0].submit();", disabled = "disabled", @class = "form-control", @id = "country" })*@
+                        @Html.DropDownList("country", ViewData["Country"] as SelectList, "Select country", new { onchange = "document.forms[0].submit();", @class = "form-control" })
+                    </div>
+                </div>
+                <br />
+                <div style="display: table-row; width: 300px;">
+                    <div style="display: table-cell; width: 93px">
+                        @Html.DropDownListFor(m => m.SelectedPeriod, Model.Periods, "All periods", new { onchange = "document.forms[0].submit();", disabled = "disabled", @class = "form-control" })
+                    </div>
+                    @if (Model.Coins.Count > 0)
+                    {
+                        <span class="badge badge-primary badge-pill">@Model.Coins.Count</span>
+                    }
+                </div>
+                @*<input id="changeContinent" type ="button" value="Submit" class="btn btn-primary" />*@
+            }
+        </div>
+        <div style="display: table-cell;">
+        </div>
+    </div>
+</div>
+<br />
+@if (Model.Coins.Count > 0)
+{
+    foreach (var period in Model.Coins.Select(x => x.Period).Distinct())
+    {
+        <div class="card-header" style="max-width: 905px">
+            <h3>@period</h3>
+        </div>
+        <br />
+        <table>
+            @for (int i = 0; i < Model.Coins.Where(x => x.Period == period).ToList().Count; i += 3)
+            {
+                <tr>
+                    <td>
+                        <div class="my-container">
+                            @{ string imageCol1Location = Model.Coins.Where(x => x.Period == period).ToList()[i].PictPreviewPath/*.Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
+                            <a href="@imageCol1Location.Replace("Coins", "CoinsFullSize")"><img src="@imageCol1Location" class="table table-hover" style="max-width: 300px"></a>
+                            <div class="my-text-block">
+                                @Model.Coins.Where(x => x.Period == period).ToList()[i].Nominal @Model.Coins.Where(x => x.Period == period).ToList()[i].Currency @Model.Coins.Where(x => x.Period == period).ToList()[i].Year @(" #")@(Model.Coins.Where(x => x.Period == period).ToList()[i].Id)
+                                
+                            </div>
+                        </div>
+                    </td>
+
+                    @if (Model.Coins.Where(x => x.Period == period).ToList().Count > i + 1)
+                    {
+                        <td>
+                            <div class="my-container">
+                                @{ string imageCol2Location = Model.Coins.Where(x => x.Period == period).ToList()[i + 1].PictPreviewPath/*.Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
+                                <a href="@imageCol2Location.Replace("Coins","CoinsFullSize")"><img src="@imageCol2Location" class="table table-hover" style="max-width: 300px"></a>
+                                <div class="my-text-block ">
+                                    @Model.Coins.Where(x => x.Period == period).ToList()[i + 1].Nominal @Model.Coins.Where(x => x.Period == period).ToList()[i + 1].Currency @Model.Coins.Where(x => x.Period == period).ToList()[i + 1].Year  @(" #")@Model.Coins.Where(x => x.Period == period).ToList()[i + 1].Id
+                                    
+                                </div>
+                            </div>
+                        </td>
+                    }
+
+                    @if (Model.Coins.Where(x => x.Period == period).ToList().Count > i + 2)
+                    {
+                        <td>
+                            <div class="my-container">
+                                @{ string imageCol3Location = Model.Coins.Where(x => x.Period == period).ToList()[i + 2].PictPreviewPath/*Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
+                                <a href="@imageCol3Location.Replace("Coins","CoinsFullSize")"><img src="@imageCol3Location" class="table table-hover" style="max-width: 300px"></a>
+                                <div class="my-text-block">
+                                    @Model.Coins.Where(x => x.Period == period).ToList()[i + 2].Nominal @Model.Coins.Where(x => x.Period == period).ToList()[i + 2].Currency @Model.Coins.Where(x => x.Period == period).ToList()[i + 2].Year @(" #")@Model.Coins.Where(x => x.Period == period).ToList()[i + 2].Id
+                                    
+                                </div>
+                            </div>
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+    <button type="submit" class="btn btn-primary" onclick="prevCountry()" style="padding-right: 20px;">Prev country</button>
+    <button type="submit" class="btn btn-primary" onclick="changeCountry()">Next country</button>
+}
+else
+{
+    //<p class="lead">There are <b>@Model.TotalCoinsNumber</b> coins and <b>@Model.TotalCountriesNumber</b> countries in the collection.</p>
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+            $(function () {
+
+                var myDropDown = document.getElementById("country");
+                if (myDropDown.length > 1)
+                    myDropDown.removeAttribute("disabled");
+
+                if ($("#SelectedPeriod option").length > 1) {
+                    $("#SelectedPeriod").removeAttr("disabled");
+                }
+            });
+
+            function changeCountry() {
+                //get dropdownlist object
+                var myDropDown = document.getElementById("country");
+                myDropDown.selectedIndex = myDropDown.selectedIndex + 1;
+                myDropDown.onchange();
+            }
+
+            function prevCountry() {
+                //get dropdownlist object
+                var myDropDown = document.getElementById("country");
+                myDropDown.selectedIndex = myDropDown.selectedIndex - 1;
+                myDropDown.onchange();
+            }
+</script>
