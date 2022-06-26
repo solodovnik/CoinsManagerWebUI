@@ -1,11 +1,9 @@
-﻿using CoinsManagerWebUI.Models;
-using CoinsManagerWebUI.Models.View;
+﻿using CoinsManagerWebUI.Models.View;
 using CoinsManagerWebUI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CoinsManagerWebUI.Controllers
@@ -20,25 +18,9 @@ namespace CoinsManagerWebUI.Controllers
             _coinCatalogService = coinCatalogService;
         }
 
-        //public async Task<IActionResult> Index(int periodId)
-        //{
-        //    ViewBag.Title = "Coins";
-
-        //    var getCoins = _coinCatalogService.GetCoinsByPeriod(periodId);
-        //    await Task.WhenAll(new Task[] { getCoins });
-
-        //    return View(new CoinListModel { Coins = getCoins.Result });
-        //}
-
         public async Task<IActionResult> Index()
         {
             ViewBag.Title = "Coins";
-
-            //_viewModel = new CoinListModel();
-            //var getCoins = _coinCatalogService.GetCoinsByPeriod(periodId);
-            //await Task.WhenAll(new Task[] { getCoins });
-
-            //return View(new CoinListModel { Coins = getCoins.Result });
 
             var continents = await _coinCatalogService.GetAllContinents();
 
@@ -48,8 +30,6 @@ namespace CoinsManagerWebUI.Controllers
             }
 
             ViewData["Continent"] = _viewModel.Continents;
-
-
             ViewData["Country"] = new List<SelectListItem>(); ;
             return View(_viewModel);
         }
@@ -60,7 +40,7 @@ namespace CoinsManagerWebUI.Controllers
             var selectedContinent = Request.Form["Continent"].ToString();
             var selectedCountry = Request.Form["Country"].ToString();
 
-            if (selectedContinent != null)
+            if (selectedContinent != null && !string.IsNullOrEmpty(selectedContinent))
             {
                 var getCountriesTask = _coinCatalogService.GetCountriesByContinentId(Convert.ToInt32(selectedContinent));
                 foreach (var country in getCountriesTask.Result)
@@ -69,7 +49,7 @@ namespace CoinsManagerWebUI.Controllers
                 ViewData["Country"] = _viewModel.Countries;
             }
 
-            if (selectedCountry != null)
+            if (selectedCountry != null && !string.IsNullOrEmpty(selectedCountry))
             {
                 var getPeriodsTask = _coinCatalogService.GetPeriodsByCountryId(Convert.ToInt32(selectedCountry));
                 foreach (var period in getPeriodsTask.Result)
@@ -82,6 +62,10 @@ namespace CoinsManagerWebUI.Controllers
                 _viewModel.Coins.Clear();
                 _viewModel.Coins.AddRange(getCoinsTask.Result);
             }
+
+            ViewData["Continent"] = _viewModel.Continents;
+            if (ViewData["Country"] == null)
+                ViewData["Country"] = _viewModel.Countries;
 
             return View(_viewModel);
         }

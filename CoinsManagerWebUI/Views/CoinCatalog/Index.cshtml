@@ -25,7 +25,7 @@
                 <br />
                 <div style="display: table-row; width: 300px;">
                     <div style="display: table-cell; width: 93px">
-                        @Html.DropDownListFor(m => m.SelectedPeriod, Model.Periods, "All periods", new { onchange = "document.forms[0].submit();", disabled = "disabled", @class = "form-control" })
+                        @Html.DropDownListFor(m => m.SelectedPeriod, Model.Periods, "All periods", new { onchange = "document.forms[0].submit();", /*disabled = "disabled",*/ @class = "form-control" })
                     </div>
                     @if (Model.Coins.Count > 0)
                     {
@@ -54,8 +54,8 @@
                 <tr>
                     <td>
                         <div class="my-container">
-                            @{ string imageCol1Location = Model.Coins.Where(x => x.Period == period).ToList()[i].PictPreviewPath/*.Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
-                            <a href="@imageCol1Location.Replace("Coins", "CoinsFullSize")"><img src="@imageCol1Location" class="table table-hover" style="max-width: 300px"></a>
+                            @{ string imageCol1Location = "images/CoinsPreview" + Model.Coins.Where(x => x.Period == period).ToList()[i].PictPreviewPath/*.Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
+                            <a href="@imageCol1Location.Replace("CoinsPreview","CoinsFullSize")"><img src="@Url.Content(@imageCol1Location)" class="table table-hover" style="max-width: 300px"></a>
                             <div class="my-text-block">
                                 @Model.Coins.Where(x => x.Period == period).ToList()[i].Nominal @Model.Coins.Where(x => x.Period == period).ToList()[i].Currency @Model.Coins.Where(x => x.Period == period).ToList()[i].Year @(" #")@(Model.Coins.Where(x => x.Period == period).ToList()[i].Id)
                                 
@@ -67,8 +67,8 @@
                     {
                         <td>
                             <div class="my-container">
-                                @{ string imageCol2Location = Model.Coins.Where(x => x.Period == period).ToList()[i + 1].PictPreviewPath/*.Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
-                                <a href="@imageCol2Location.Replace("Coins","CoinsFullSize")"><img src="@imageCol2Location" class="table table-hover" style="max-width: 300px"></a>
+                                @{ string imageCol2Location = "images/CoinsPreview" + Model.Coins.Where(x => x.Period == period).ToList()[i + 1].PictPreviewPath/*.Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
+                                <a href="@imageCol2Location.Replace("CoinsPreview","CoinsFullSize")"><img src="@Url.Content(@imageCol2Location)" class="table table-hover" style="max-width: 300px"></a>
                                 <div class="my-text-block ">
                                     @Model.Coins.Where(x => x.Period == period).ToList()[i + 1].Nominal @Model.Coins.Where(x => x.Period == period).ToList()[i + 1].Currency @Model.Coins.Where(x => x.Period == period).ToList()[i + 1].Year  @(" #")@Model.Coins.Where(x => x.Period == period).ToList()[i + 1].Id
                                     
@@ -81,8 +81,8 @@
                     {
                         <td>
                             <div class="my-container">
-                                @{ string imageCol3Location = Model.Coins.Where(x => x.Period == period).ToList()[i + 2].PictPreviewPath/*Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
-                                <a href="@imageCol3Location.Replace("Coins","CoinsFullSize")"><img src="@imageCol3Location" class="table table-hover" style="max-width: 300px"></a>
+                                @{ string imageCol3Location = "images/CoinsPreview" + Model.Coins.Where(x => x.Period == period).ToList()[i + 2].PictPreviewPath/*Replace(AppDomain.CurrentDomain.BaseDirectory, "")*/; }
+                                <a href="@imageCol3Location.Replace("CoinsPreview","CoinsFullSize")"><img src="@Url.Content(@imageCol3Location)" class="table table-hover" style="max-width: 300px"></a>
                                 <div class="my-text-block">
                                     @Model.Coins.Where(x => x.Period == period).ToList()[i + 2].Nominal @Model.Coins.Where(x => x.Period == period).ToList()[i + 2].Currency @Model.Coins.Where(x => x.Period == period).ToList()[i + 2].Year @(" #")@Model.Coins.Where(x => x.Period == period).ToList()[i + 2].Id
                                     
