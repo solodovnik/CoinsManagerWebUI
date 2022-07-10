@@ -1,0 +1,24 @@
+﻿@model CoinsManagerWebUI.Models.View.CoinListModel
+@{
+    /**/
+
+    ViewBag.Title = "Collection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div style="width: 100%; display: table;">
+    <div style="display: table-row">
+        <div style="display: table-cell; vertical-align: top; text-align: left; padding-right: 20px">
+            @using (Html.BeginForm("Coin", "CoinCatalog", FormMethod.Get))
+            {
+                @Html.DropDownListFor(m => m.CountryId, Model.Countries, "--Select Country--", new { @class = "form-control" });
+                
+                <input type="submit" value="Submit">
+            }            
+        </div>
+        <div style="display: table-cell;">
+        </div>
+    </div>
+</div>
+<br />
