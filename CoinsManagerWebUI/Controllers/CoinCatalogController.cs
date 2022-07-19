@@ -48,7 +48,10 @@ namespace CoinsManagerWebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> Coin(int countryId)
         {
-            _viewModel.CountryId = countryId;            
+            var country = await _coinCatalogService.GetCountryById(countryId);
+            _viewModel.Country = country;
+            var continent = await _coinCatalogService.GetContinentById(country.Continent);
+            _viewModel.Continent = continent;
             var periods = await _coinCatalogService.GetPeriodsByCountryId(countryId);
             _viewModel.Periods = periods.ToList();
             foreach (var period in periods)

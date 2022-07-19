@@ -19,5 +19,7 @@ namespace CoinsManagerWebUI.Models.View
         public List<Period> Periods { get; set; }
         public int? ContinentId { get; set; }
         public int? CountryId { get; set; }
+        public Country Country { get; set; }
+        public Continent Continent { get; set; }
     }
 }

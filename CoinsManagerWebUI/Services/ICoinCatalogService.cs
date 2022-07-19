@@ -9,6 +9,8 @@ namespace CoinsManagerWebUI.Services
         Task<IEnumerable<Coin>> GetCoinsByPeriod(int periodId);
         Task<IEnumerable<Continent>> GetAllContinents();
         Task<IEnumerable<Country>> GetCountriesByContinentId(int continentId);
+        Task<Country> GetCountryById(int countryId);
+        Task<Continent> GetContinentById(int continentId);
         Task<IEnumerable<Period>> GetPeriodsByCountryId(int countryId);
     }
 }

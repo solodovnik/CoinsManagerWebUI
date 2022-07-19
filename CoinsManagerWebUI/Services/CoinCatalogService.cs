@@ -26,15 +26,28 @@ namespace CoinsManagerWebUI.Services
             return await response.ReadContentAs<List<Continent>>();
         }
 
+        public async Task<Country> GetCountryById(int countryId)
+        {
+            var response = await _client.GetAsync($"/v1/Coins/Countries/{countryId}");
+            return await response.ReadContentAs<Country>();
+        }
+
+        public async Task<Continent> GetContinentById(int continentId)
+        {
+            var response = await _client.GetAsync($"/v1/Coins/Continents/{continentId}");
+            return await response.ReadContentAs<Continent>();
+        }
+
         public async Task<IEnumerable<Country>> GetCountriesByContinentId(int continentId)
         {
-            var response = await _client.GetAsync($"/v1/Coins/Countries/{continentId}");
+            var response = await _client.GetAsync($"/v1/Coins/GetCountriesByContinent?continentId={continentId}");
             return await response.ReadContentAs<List<Country>>();
         }
 
+
         public async Task<IEnumerable<Period>> GetPeriodsByCountryId(int countryId)
         {
-            var response = await _client.GetAsync($"/v1/Coins/Periods/{countryId}");
+            var response = await _client.GetAsync($"/v1/Coins/GetPeriodsByCountry?countryId={countryId}");
             return await response.ReadContentAs<List<Period>>();
         }
     }

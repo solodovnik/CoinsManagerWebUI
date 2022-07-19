@@ -5,7 +5,8 @@
     ViewBag.Title = "Collection";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<h1>@Model.Continent.Continent1</h1>
+<h2>@Model.Country.Country1</h2>
 @foreach (var period in Model.Coins.Select(x => x.Period).Distinct())
     {
         <div class="card-header" style="max-width: 905px">
@@ -61,7 +62,7 @@
 
     <input type="button"
          value="Previous Country"
-         onclick="location.href='@Url.Action("Coin", "CoinCatalog", new {countryId = Model.CountryId-1})'" />
+         onclick="location.href='@Url.Action("Coin", "CoinCatalog", new {countryId = Model.Country.Id - 1})'" />
     <input type="button"
          value="Next Country"
-         onclick="location.href='@Url.Action("Coin", "CoinCatalog", new {countryId = Model.CountryId+1})'" />
+         onclick="location.href='@Url.Action("Coin", "CoinCatalog", new {countryId = Model.Country.Id + 1})'" />
