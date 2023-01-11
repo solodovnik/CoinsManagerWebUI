@@ -13,12 +13,7 @@ namespace CoinsManagerWebUI.Services
         public CoinCatalogService(HttpClient client)
         {
             _client = client;
-        }
-        public async Task<IEnumerable<Coin>> GetCoinsByPeriod(int periodId)
-        {
-            var response = await _client.GetAsync($"/v1/Coins/{periodId}");
-            return await response.ReadContentAs<List<Coin>>();
-        }
+        }       
 
         public async Task<IEnumerable<Continent>> GetAllContinents()
         {            
@@ -44,11 +39,22 @@ namespace CoinsManagerWebUI.Services
             return await response.ReadContentAs<List<Country>>();
         }
 
-
         public async Task<IEnumerable<Period>> GetPeriodsByCountryId(int countryId)
         {
             var response = await _client.GetAsync($"/v1/Coins/GetPeriodsByCountry?countryId={countryId}");
             return await response.ReadContentAs<List<Period>>();
+        }
+
+        public async Task<IEnumerable<Coin>> GetCoinsByPeriod(int periodId)
+        {
+            var response = await _client.GetAsync($"/v1/Coins/GetCoinsByPeriod?periodId={periodId}");
+            return await response.ReadContentAs<List<Coin>>();
+        }
+
+        public async void CreateCoin(Coin coin)
+        {
+           
+
         }
     }
 }
