@@ -11,13 +11,16 @@ namespace CoinsManagerWebUI
     public class Startup
     {
         public IConfiguration Configuration { get; }
-
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
             services.AddHttpClient<ICoinCatalogService, CoinCatalogService>(c =>
-                c.BaseAddress = new Uri("https://localhost:5010"));
+                c.BaseAddress = new Uri(Configuration["Api:Uri"]));          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

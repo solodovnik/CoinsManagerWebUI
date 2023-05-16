@@ -1,22 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using CoinsManagerWebUI.Extensions;
+using CoinsManagerWebUI.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using CoinsManagerWebUI.Extensions;
-using CoinsManagerWebUI.Models;
 
 namespace CoinsManagerWebUI.Services
 {
     public class CoinCatalogService : ICoinCatalogService
     {
         private readonly HttpClient _client;
-
-        public CoinCatalogService(HttpClient client)
+        private readonly IConfiguration _configuration;
+        public CoinCatalogService(HttpClient client, IConfiguration configuration)
         {
             _client = client;
-        }       
-
+            _configuration = configuration;
+        } 
+        
         public async Task<IEnumerable<Continent>> GetAllContinents()
-        {            
+        {
+            var accessToken = await GetToken();
+            _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
             var response = await _client.GetAsync("/v1/Coins/GetAllContinents");
             return await response.ReadContentAs<List<Continent>>();
         }
@@ -50,11 +55,27 @@ namespace CoinsManagerWebUI.Services
             var response = await _client.GetAsync($"/v1/Coins/GetCoinsByPeriod?periodId={periodId}");
             return await response.ReadContentAs<List<Coin>>();
         }
-
         public async void CreateCoin(Coin coin)
         {
            
 
+        }
+
+        private async Task<string> GetToken()
+        {
+            var clientId = _configuration["Api:ClientId"];
+            var clientSecret = _configuration["Api:ClientSecret"];
+            var authority = _configuration["Api:Authority"];
+            var applicationIdUri = _configuration["Api:ApplicationIdUri"];
+
+            IConfidentialClientApplication app;
+            app = ConfidentialClientApplicationBuilder.Create(clientId)
+           .WithClientSecret(clientSecret)
+           .WithAuthority(authority)
+           .Build();
+
+            var authResult = await app.AcquireTokenForClient(new string[] { $"{applicationIdUri}/.default" }).ExecuteAsync();
+            return authResult.AccessToken;
         }
     }
 }
