@@ -20,8 +20,6 @@ namespace CoinsManagerWebUI.Services
         
         public async Task<IEnumerable<Continent>> GetAllContinents()
         {
-            var accessToken = await GetToken();
-            _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
             var response = await _client.GetAsync("/v1/Coins/GetAllContinents");
             return await response.ReadContentAs<List<Continent>>();
         }
@@ -70,9 +68,9 @@ namespace CoinsManagerWebUI.Services
 
             IConfidentialClientApplication app;
             app = ConfidentialClientApplicationBuilder.Create(clientId)
-           .WithClientSecret(clientSecret)
-           .WithAuthority(authority)
-           .Build();
+                .WithClientSecret(clientSecret)
+                .WithAuthority(authority)
+                .Build();
 
             var authResult = await app.AcquireTokenForClient(new string[] { $"{applicationIdUri}/.default" }).ExecuteAsync();
             return authResult.AccessToken;

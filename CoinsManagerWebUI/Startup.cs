@@ -1,3 +1,4 @@
+using CoinsManagerWebUI.Authentication;
 using CoinsManagerWebUI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,8 +20,11 @@ namespace CoinsManagerWebUI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<LoginHandler>();
             services.AddHttpClient<ICoinCatalogService, CoinCatalogService>(c =>
-                c.BaseAddress = new Uri(Configuration["Api:Uri"]));          
+                c.BaseAddress = new Uri(Configuration["Api:Uri"]))
+                .AddHttpMessageHandler<LoginHandler>();
+            services.AddScoped<IAuthenticator, AzureJwtAuthenticator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
