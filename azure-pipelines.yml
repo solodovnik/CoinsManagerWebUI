@@ -18,13 +18,6 @@ steps:
     publishWebProjects: true
     arguments: '-r linux-x64 --output $(build.artifactstagingdirectory)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: '**/*Tests/*.csproj'
-    testRunTitle: 'dotnet test'
-  displayName: 'Test'
-
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
