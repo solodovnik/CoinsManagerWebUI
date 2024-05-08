@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.AzureAppServices;
 using System;
 
 namespace CoinsManagerWebUI
@@ -25,6 +27,13 @@ namespace CoinsManagerWebUI
                 c.BaseAddress = new Uri(Configuration["Api:Uri"]))
                 .AddHttpMessageHandler<LoginHandler>();
             services.AddScoped<IAuthenticator, AzureJwtAuthenticator>();
+            services.AddLogging(loggerBuilder => { loggerBuilder.AddAzureWebAppDiagnostics(); });
+            services.Configure<AzureFileLoggerOptions>(options =>
+            {
+                options.FileName = "logs-";
+                options.FileSizeLimit = 50 * 1024;
+                options.RetainedFileCountLimit = 5;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +43,7 @@ namespace CoinsManagerWebUI
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

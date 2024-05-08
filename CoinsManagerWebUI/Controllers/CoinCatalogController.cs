@@ -2,6 +2,7 @@
 using CoinsManagerWebUI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,16 +13,20 @@ namespace CoinsManagerWebUI.Controllers
     {
         private readonly ICoinCatalogService _coinCatalogService;
         private CoinListModel _viewModel = new CoinListModel();
+        private readonly ILogger<CoinCatalogController> _logger;
 
-        public CoinCatalogController(ICoinCatalogService coinCatalogService)
+        public CoinCatalogController(ICoinCatalogService coinCatalogService, ILogger<CoinCatalogController> logger)
         {
             _coinCatalogService = coinCatalogService;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Index page loading started");
             ViewBag.Title = "Coins";
 
+            _logger.LogInformation("Send request to get all continents");
             var continents = await _coinCatalogService.GetAllContinents();
 
             foreach (var continent in continents)
