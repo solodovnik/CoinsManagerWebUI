@@ -40,8 +40,7 @@ namespace CoinsManagerWebUI
 
             // Assign logger. Make sure you have the file NLog.config
             // https://github.com/NLog/NLog/wiki/File-target
-            logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Error("test");
+            logger = NLog.LogManager.LoadConfiguration("NLog.config").GetCurrentClassLogger();
             try
             {
                 CreateHostBuilder(args).Build().Run();
