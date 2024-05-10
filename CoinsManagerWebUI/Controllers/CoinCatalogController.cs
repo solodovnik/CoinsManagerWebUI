@@ -26,7 +26,6 @@ namespace CoinsManagerWebUI.Controllers
             _logger.LogInformation("Index page loading started");
             ViewBag.Title = "Coins";
 
-            _logger.LogInformation("Send request to get all continents");
             var continents = await _coinCatalogService.GetAllContinents();
 
             foreach (var continent in continents)
