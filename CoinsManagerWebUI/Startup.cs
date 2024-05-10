@@ -27,7 +27,12 @@ namespace CoinsManagerWebUI
                 c.BaseAddress = new Uri(Configuration["Api:Uri"]))
                 .AddHttpMessageHandler<LoginHandler>();
             services.AddScoped<IAuthenticator, AzureJwtAuthenticator>();
+            //Add logging to file system
             services.AddLogging(loggerBuilder => { loggerBuilder.AddAzureWebAppDiagnostics(); });
+            //Add logging to AppInsights
+            services.AddLogging(loggerBuilder => { loggerBuilder.AddApplicationInsights(
+                configureTelemetryConfiguration: (config) => 
+                config.ConnectionString = Configuration["ConnectionStrings:AppInsights"], configureApplicationInsightsLoggerOptions: options => { }); });
             services.Configure<AzureFileLoggerOptions>(options =>
             {
                 options.FileName = "logs-";
