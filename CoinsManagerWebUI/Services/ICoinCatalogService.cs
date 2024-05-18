@@ -12,5 +12,6 @@ namespace CoinsManagerWebUI.Services
         Task<Country> GetCountryById(int countryId);
         Task<Continent> GetContinentById(int continentId);
         Task<IEnumerable<Period>> GetPeriodsByCountryId(int countryId);
+        Task<string> CreateCoin(Coin coin);
     }
 }

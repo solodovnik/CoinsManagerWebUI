@@ -30,9 +30,16 @@ namespace CoinsManagerWebUI
             //Add logging to file system
             services.AddLogging(loggerBuilder => { loggerBuilder.AddAzureWebAppDiagnostics(); });
             //Add logging to AppInsights
-            services.AddLogging(loggerBuilder => { loggerBuilder.AddApplicationInsights(
-                configureTelemetryConfiguration: (config) => 
-                config.ConnectionString = Configuration.GetConnectionString("AppInsights"), configureApplicationInsightsLoggerOptions: options => { }); });
+            var appInsightsConnString = Configuration.GetConnectionString("AppInsights");
+            if (appInsightsConnString != null)
+            {
+                services.AddLogging(loggerBuilder =>
+                {
+                    loggerBuilder.AddApplicationInsights(
+                    configureTelemetryConfiguration: (config) =>
+                    config.ConnectionString = appInsightsConnString, configureApplicationInsightsLoggerOptions: options => { });
+                });
+            }
             services.Configure<AzureFileLoggerOptions>(options =>
             {
                 options.FileName = "logs-";

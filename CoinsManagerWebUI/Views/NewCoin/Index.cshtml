@@ -1,0 +1,77 @@
+﻿@model CoinsManagerWebUI.Models.View.NewCoinModel
+
+@{
+    ViewData["Title"] = "NewCoin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    const string ddlEmptyValue = ".............................................";
+}
+
+<h1>CreateCoin</h1>
+
+<h4>Coin</h4>
+<hr />
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">@ViewBag.Message</div>
+}
+
+@using (Html.BeginForm("CreateCoin", "NewCoin", FormMethod.Post))
+{
+    <label>Select continent</label>
+    @Html.DropDownListFor(m => m.ContinentId, Model.Continents, ddlEmptyValue, new { id = "continentsDdl", @class = "form-control", @onchange = "GetCountries(this.value)" })<br />
+    <label>Select country</label>
+    @Html.DropDownListFor(m => m.CountryId, new SelectList(Enumerable.Empty<SelectListItem>()), ddlEmptyValue, new { id = "countriesDdl", @class = "form-control", @onchange = "GetPeriods(this.value)" })<br />
+    <label>Select period</label>
+    @Html.DropDownListFor(m => m.Coin.Period, new SelectList(Enumerable.Empty<SelectListItem>()), ddlEmptyValue, new { id = "periodsDdl", @class = "form-control" })<br />      
+    @Html.TextBoxFor(m => m.Coin.Nominal, "Nominal", new { @class = "form-control" });<br />
+    @Html.TextBoxFor(m => m.Coin.Currency, "Currency", new { @class = "form-control" });<br />
+    @Html.TextBoxFor(m => m.Coin.Year, "Year", new { @class = "form-control" });<br />
+    @Html.TextBoxFor(m => m.Coin.CommemorativeName, "Commemorative Name", new { @class = "form-control" });<br />
+    @Html.TextBoxFor(m => m.Coin.PictPreviewPath, "Picture path", new { @class = "form-control" });<br /> 
+    <input type="submit" value="Submit">
+} 
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">  
+    function GetCountries(id) {
+        var url = '@Url.Action("GetCountries", "NewCoin")';
+        $.ajax({                
+                url: url,
+                cache: false,
+                data: { Id: id },
+                type: "POST",
+                success: function (data) {     
+                    var markup = "<option value= '0'>.............................................</option>";
+                    for (var x = 0; x < data.length; x++) {
+                        markup += '<option value="' + data[x].value + '">' + data[x].text + '</option>';
+                    }
+                    $("#countriesDdl").html(markup).show();
+                    $("#periodsDdl").html("<option value= '0'>.............................................</option>").show();
+                },
+            error: function(response) {
+                alert("error:" + response);
+            }
+        });
+    }
+
+        function GetPeriods(id) {
+        var url = '@Url.Action("GetPeriods", "NewCoin")';
+        $.ajax({                
+                url: url,
+                cache: false,
+                data: { Id: id },
+                type: "POST",
+                success: function (data) {     
+                    var markup = "<option value= '0'>.............................................</option>";
+                    for (var x = 0; x < data.length; x++) {
+                        markup += '<option value="' + data[x].value + '">' + data[x].text + '</option>';
+                    }
+                    $("#periodsDdl").html(markup).show();
+                },
+            error: function(response) {
+                alert("error:" + response);
+            }
+        });
+    }
+</script>

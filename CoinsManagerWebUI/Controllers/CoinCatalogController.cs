@@ -23,7 +23,7 @@ namespace CoinsManagerWebUI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("Index page loading started");
+            _logger.LogInformation("Home page loading started");
             ViewBag.Title = "Coins";
 
             var continents = await _coinCatalogService.GetAllContinents();
